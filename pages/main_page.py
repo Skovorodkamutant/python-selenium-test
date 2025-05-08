@@ -21,6 +21,7 @@ class Main_page(Base):
 
 
     #Locators
+    loader = "//div[@class='general-preloader']"
     search_field = "//input[@id='searchInput']"
     header_page = "//h1[@class='searching-results__title']"
 
@@ -34,6 +35,10 @@ class Main_page(Base):
     def get_header_page(self):
         return WebDriverWait(self.driver, 30).until(
             EC.element_to_be_clickable((By.XPATH, self.header_page)))
+
+    def get_loader(self):
+        return WebDriverWait(self.driver, 30).until(
+            EC.invisibility_of_element((By.XPATH, self.loader)))
 
     #Actions
     def input_search_field(self):
@@ -53,7 +58,7 @@ class Main_page(Base):
         self.driver.get(self.url)
         self.driver.maximize_window()
         self.get_current_url()
-        time.sleep(2)
+        self.get_loader()
         self.input_search_field()
         self.press_enter_search_field()
         self.assert_word(self.get_header_page(), "электроника")
